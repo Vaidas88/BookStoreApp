@@ -21,4 +21,4 @@ foreach -> "title: {title}, description: {description}, amount: {amount}"
 Additional optional requirements:
 1. Only allow unique names in the store.
 2. Place the code in github.
-3. Delete functionality.
+3. Delete book functionality.
