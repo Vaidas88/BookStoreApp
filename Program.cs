@@ -60,6 +60,23 @@ void ListBooks()
 
 void AddBook()
 {
+    Book newBook = GetNewBook();
+
+    if (books.Count > 0)
+    {
+        foreach (var book in books)
+        {
+            if (book.Title == newBook.Title)
+            {
+                throw new Exception("Duplicate entry, try again.");
+            }
+        }
+    }
+    books.Add(newBook);
+}
+
+Book GetNewBook()
+{
     Console.WriteLine("Please enter the Title");
     var title = Console.ReadLine();
 
@@ -78,21 +95,7 @@ void AddBook()
         throw new Exception("Wrong amount.");
     }
 
-    if (books.Count > 0)
-    {
-        foreach (var book in books)
-        {
-            if (book.Title == title)
-            {
-                Console.WriteLine("Duplicate entry, try again.");
-                continue;
-            }
-        }
-    }
-
-    var Book = new Book(title, description, amount);
-
-    books.Add(Book);
+    return new Book(title, description, amount);
 }
 
 void DeleteBook(string command)
