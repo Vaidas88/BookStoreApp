@@ -11,7 +11,6 @@ namespace BookStoreApp.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public int Amount { get; set; }
-
         public Book(string title, string description, int amount)
         {
             this.Title = title;

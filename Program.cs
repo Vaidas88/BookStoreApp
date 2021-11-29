@@ -4,7 +4,7 @@ var books = new List<Book>();
 
 while (true)
 {
-    Console.WriteLine("Please enter command: 'Add', 'List', 'Delete {title}', Exit: ");
+    Console.WriteLine("Please enter command: 'Add', 'List', 'Delete {title}', Update, Exit: ");
     var command = Console.ReadLine();
 
     if (command.ToLower() == "exit")
@@ -47,10 +47,7 @@ while (true)
     }
     else if (command.ToLower() == "list")
     {
-        foreach (var book in books)
-        {
-            book.PrintBook();
-        }
+        ListBooks();
     }
     else if (command.ToLower().Contains("delete"))
     {
@@ -63,5 +60,52 @@ while (true)
                 continue;
             }
         }
+    }
+    else if (command.ToLower().Contains("update"))
+    {
+        ListBooks();
+        Console.WriteLine("Enter book number to edit:");
+        var bookNumber = 0;
+        try
+        {
+            bookNumber = Convert.ToInt32(Console.ReadLine()) - 1;
+        }
+        catch
+        {
+            Console.WriteLine("Wrong book number");
+            continue;
+        }
+        Console.WriteLine("Enter new title or leave empty for original title:");
+        var newTitle = Console.ReadLine();
+        if (newTitle != "")
+        {
+            books[bookNumber].Title = newTitle;
+        }
+        Console.WriteLine("Enter new description or leave empty for original description:");
+        var newDescription = Console.ReadLine();
+        if (newDescription != "")
+        {
+            books[bookNumber].Description = newDescription;
+        }
+        Console.WriteLine("Enter new amount or leave empty for original amount:");
+        var newAmount = 0;
+        try
+        {
+            newAmount = Convert.ToInt32(Console.ReadLine());
+            books[bookNumber].Amount = newAmount;
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+}
+
+void ListBooks()
+{
+    for (int i = 0; i < books.Count; i++)
+    {
+        Console.Write($"{i + 1}. ");
+        books[i].PrintBook();
     }
 }
