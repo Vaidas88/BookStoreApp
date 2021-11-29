@@ -10,7 +10,7 @@ books.Add(new Book("Nr 5 book", "Some desc 5", 5555));
 
 while (true)
 {
-    Console.WriteLine("Please enter command: 'Add', 'List', 'Delete {title}', Update, Exit: ");
+    Console.WriteLine("Please enter command: 'Add', 'List', 'Delete {title}', Update {title}, Exit: ");
     var command = Console.ReadLine();
 
     if (command.ToLower() == "exit")
@@ -36,11 +36,11 @@ while (true)
     {
         DeleteBook(command);
     }
-    if (command.ToLower().Contains("update"))
+    if (command.ToLower().IndexOf("update") == 0)
     {
         try
         {
-            UpdateBook();
+            UpdateBook(command);
         }
         catch (Exception ex)
         {
@@ -111,40 +111,38 @@ void DeleteBook(string command)
     }
 }
 
-void UpdateBook()
+void UpdateBook(string command)
 {
-    ListBooks();
-    Console.WriteLine("Enter book number to edit:");
-    var bookNumber = 0;
-    try
+    var titleToUpdate = command.ToLower().Substring(command.IndexOf(' ') + 1);
+
+    for (int i = 0; i < books.Count; i++)
     {
-        bookNumber = Convert.ToInt32(Console.ReadLine()) - 1;
-    }
-    catch
-    {
-        throw new Exception("Wrong book number");
-    }
-    Console.WriteLine("Enter new title or leave empty for original title:");
-    var newTitle = Console.ReadLine();
-    if (newTitle != "")
-    {
-        books[bookNumber].Title = newTitle;
-    }
-    Console.WriteLine("Enter new description or leave empty for original description:");
-    var newDescription = Console.ReadLine();
-    if (newDescription != "")
-    {
-        books[bookNumber].Description = newDescription;
-    }
-    Console.WriteLine("Enter new amount or leave empty for original amount:");
-    var newAmount = 0;
-    try
-    {
-        newAmount = Convert.ToInt32(Console.ReadLine());
-        books[bookNumber].Amount = newAmount;
-    }
-    catch (Exception ex)
-    {
-        throw new Exception("Wrong new amount");
+        if (books[i].Title.ToLower() == titleToUpdate)
+        {
+            Console.WriteLine("Enter new title or leave empty for original title:");
+            var newTitle = Console.ReadLine();
+            if (newTitle != "")
+            {
+                books[i].Title = newTitle;
+            }
+            Console.WriteLine("Enter new description or leave empty for original description:");
+            var newDescription = Console.ReadLine();
+            if (newDescription != "")
+            {
+                books[i].Description = newDescription;
+            }
+            Console.WriteLine("Enter new amount or leave empty for original amount:");
+            var newAmount = 0;
+            try
+            {
+                newAmount = Convert.ToInt32(Console.ReadLine());
+                books[i].Amount = newAmount;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Wrong new amount");
+            }
+            continue;
+        }
     }
 }
