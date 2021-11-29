@@ -2,6 +2,12 @@
 
 var books = new List<Book>();
 
+books.Add(new Book("Nr 1 book", "Some desc 1", 1111));
+books.Add(new Book("Nr 2 book", "Some desc 2", 2222));
+books.Add(new Book("Nr 3 book", "Some desc 3", 3333));
+books.Add(new Book("Nr 4 book", "Some desc 4", 4444));
+books.Add(new Book("Nr 5 book", "Some desc 5", 5555));
+
 while (true)
 {
     Console.WriteLine("Please enter command: 'Add', 'List', 'Delete {title}', Update, Exit: ");
@@ -11,92 +17,34 @@ while (true)
     {
         return;
     }
-    else if (command.ToLower() == "add")
+    if (command.ToLower() == "add")
     {
-        Console.WriteLine("Please enter the Title");
-        var title = Console.ReadLine();
-
-        Console.WriteLine("Please enter the Description");
-        var description = Console.ReadLine();
-
-        Console.WriteLine("Please enter the Amount");
-        var amount = 0;
         try
         {
-            amount = Convert.ToInt32(Console.ReadLine());
+            AddBook();
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Wrong amount");
+            Console.WriteLine(ex.Message);
         }
-
-        var Book = new Book(title, description, amount);
-
-        if (books.Count > 0)
-        {
-            foreach (var book in books)
-            {
-                if (book.Title == title)
-                {
-                    Console.WriteLine("Duplicate entry, try again.");
-                    continue;
-                }
-            }
-        }
-        books.Add(Book);
     }
-    else if (command.ToLower() == "list")
+    if (command.ToLower() == "list")
     {
         ListBooks();
     }
-    else if (command.ToLower().Contains("delete"))
+    if (command.ToLower().IndexOf("delete") == 0)
     {
-        var titleToDelete = command.Substring(command.IndexOf(' ') + 1);
-        for (int i = 0; i < books.Count; i++)
-        {
-            if (books[i].Title == titleToDelete)
-            {
-                books.RemoveAt(i);
-                continue;
-            }
-        }
+        DeleteBook(command);
     }
-    else if (command.ToLower().Contains("update"))
+    if (command.ToLower().Contains("update"))
     {
-        ListBooks();
-        Console.WriteLine("Enter book number to edit:");
-        var bookNumber = 0;
         try
         {
-            bookNumber = Convert.ToInt32(Console.ReadLine()) - 1;
-        }
-        catch
-        {
-            Console.WriteLine("Wrong book number");
-            continue;
-        }
-        Console.WriteLine("Enter new title or leave empty for original title:");
-        var newTitle = Console.ReadLine();
-        if (newTitle != "")
-        {
-            books[bookNumber].Title = newTitle;
-        }
-        Console.WriteLine("Enter new description or leave empty for original description:");
-        var newDescription = Console.ReadLine();
-        if (newDescription != "")
-        {
-            books[bookNumber].Description = newDescription;
-        }
-        Console.WriteLine("Enter new amount or leave empty for original amount:");
-        var newAmount = 0;
-        try
-        {
-            newAmount = Convert.ToInt32(Console.ReadLine());
-            books[bookNumber].Amount = newAmount;
+            UpdateBook();
         }
         catch (Exception ex)
         {
-
+            Console.WriteLine(ex.Message);
         }
     }
 }
@@ -107,5 +55,93 @@ void ListBooks()
     {
         Console.Write($"{i + 1}. ");
         books[i].PrintBook();
+    }
+}
+
+void AddBook()
+{
+    Console.WriteLine("Please enter the Title");
+    var title = Console.ReadLine();
+
+    Console.WriteLine("Please enter the Description");
+    var description = Console.ReadLine();
+
+    Console.WriteLine("Please enter the Amount");
+    var amount = 0;
+
+    try
+    {
+        amount = Convert.ToInt32(Console.ReadLine());
+    }
+    catch (Exception ex)
+    {
+        throw new Exception("Wrong amount.");
+    }
+
+    if (books.Count > 0)
+    {
+        foreach (var book in books)
+        {
+            if (book.Title == title)
+            {
+                Console.WriteLine("Duplicate entry, try again.");
+                continue;
+            }
+        }
+    }
+
+    var Book = new Book(title, description, amount);
+
+    books.Add(Book);
+}
+
+void DeleteBook(string command)
+{
+    var titleToDelete = command.Substring(command.IndexOf(' ') + 1);
+    for (int i = 0; i < books.Count; i++)
+    {
+        if (books[i].Title == titleToDelete)
+        {
+            books.RemoveAt(i);
+            continue;
+        }
+    }
+}
+
+void UpdateBook()
+{
+    ListBooks();
+    Console.WriteLine("Enter book number to edit:");
+    var bookNumber = 0;
+    try
+    {
+        bookNumber = Convert.ToInt32(Console.ReadLine()) - 1;
+    }
+    catch
+    {
+        throw new Exception("Wrong book number");
+    }
+    Console.WriteLine("Enter new title or leave empty for original title:");
+    var newTitle = Console.ReadLine();
+    if (newTitle != "")
+    {
+        books[bookNumber].Title = newTitle;
+    }
+    Console.WriteLine("Enter new description or leave empty for original description:");
+    var newDescription = Console.ReadLine();
+    if (newDescription != "")
+    {
+        books[bookNumber].Description = newDescription;
+    }
+    Console.WriteLine("Enter new amount or leave empty for original amount:");
+    var newAmount = 0;
+    try
+    {
+        newAmount = Convert.ToInt32(Console.ReadLine());
+        books[bookNumber].Amount = newAmount;
+    }
+    catch (Exception ex)
+    {
+        throw new Exception("Wrong new amount");
     }
 }
