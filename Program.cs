@@ -34,7 +34,15 @@ while (true)
     }
     if (command.ToLower().IndexOf("delete") == 0)
     {
-        DeleteBook(command);
+        try
+        {
+            DeleteBook(command);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
     }
     if (command.ToLower().IndexOf("update") == 0)
     {
@@ -109,6 +117,7 @@ void DeleteBook(string command)
             continue;
         }
     }
+    throw new Exception("Nothing to delete.");
 }
 
 void UpdateBook(string command)
@@ -145,4 +154,5 @@ void UpdateBook(string command)
             continue;
         }
     }
+    throw new Exception("Nothing to update.");
 }
